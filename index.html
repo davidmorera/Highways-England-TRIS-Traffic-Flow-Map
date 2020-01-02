@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Highways England Traffic Counts Map</title>
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <link rel="stylesheet" href="css/titatoggle-dist-min.css">
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  
+  <script type="text/javascript">
+	function showonlyone(thechosenone) {
+		 $('.bubbleplot').each(function(index) {
+			  if ($(this).attr("id") == thechosenone) {
+				   $(this).show(0);
+			  }
+			  else {
+				   $(this).hide(0);
+			  }
+		 });
+	}
+  </script>
+
+  <style type="text/css">
+	body {
+	  padding: 0,0,0,0;
+	  margins: 0,0,0,0;
+	  background-color:#343332;
+	  overflow-y: hidden;
+	}
+	
+	.panel > .panel-heading {
+    background-image: none;
+    background-color: white;
+
+	}	
+	
+	.clickable {
+    background: rgba(0, 0, 0, 0.15);
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+	}
+	
+	.social:hover {
+     -webkit-transform: scale(1.1);
+     -moz-transform: scale(1.1);
+     -o-transform: scale(1.1);
+	 }
+	 .social {
+		 -webkit-transform: scale(0.8);
+		 /* Browser Variations: */
+		 
+		 -moz-transform: scale(0.8);
+		 -o-transform: scale(0.8);
+		 -webkit-transition-duration: 0.5s;
+		 -moz-transition-duration: 0.5s;
+		 -o-transition-duration: 0.5s;
+	}
+
+	 
+	#social-fb:hover {
+		color: #3B5998;
+	}
+	#social-tw:hover {
+		color: #4099FF;
+	}
+	#social-gp:hover {
+		color: #d34836;
+	}
+	#social-em:hover {
+		color: #f39c12;
+	}
+	 
+	 
+	.allVCircle {
+	  margin-top:2px;
+	  width: 10px;
+	  height:10px;
+	  border-radius: 50%;
+	  background-color: rgba(31,119,180,0.7);
+	}
+	  
+	.carCircle {
+	  margin-top:2px;
+	  width: 10px;
+	  height:10px;
+	  border-radius: 50%;
+	  background-color: rgba(255,127,0,0.7);
+	}
+	
+	.hgvCircle {
+	  margin-top:2px;
+	  width: 10px;
+	  height:10px;
+	  border-radius: 50%;
+	  background-color: rgba(152,78,163,0.7);
+	}
+	
+	.incCircle {
+	  margin-top:2px;
+	  width: 10px;
+	  height:10px;
+	  border-radius: 50%;
+	  background-color: rgba(77,146,33,0.7);
+	}
+	
+	.decCircle {
+	  margin-top:2px;
+	  width: 10px;
+	  height:10px;
+	  border-radius: 50%;
+	  background-color: rgba(197,27,125,0.7);
+	}
+	
+	.blkCircle {
+	  margin-top:2px;
+	  width: 10px;
+	  height:10px;
+	  border-radius: 50%;
+	  background-color: rgba(255,255,255,0);
+	}
+  </style>
+  
+	
+</head>
+
+<body>
+<div id="gd" style="overflow-y: hidden;"></div>
+
+<div class="panel-group" style="width:400px; position: fixed; top: 10px; bottom: 0px;  left: 10px; z-index: 1; ">
+	
+	<div class="panel panel-default" id="selectorPanel">
+		<div class="panel-heading">
+			<h4 style="margin-bottom:0; margin-top:5px">Highways England Traffic Counts</h4>
+		</div>
+		
+		<div class="panel-body" data-num="0" style="padding-top:0px">
+			<div class="form-group">
+				<p>Showing average daily raw counts for each year.</p> 		
+			</div>
+			
+			<div class="form-group" style="margin-bottom:0px" >
+				<label for="yeardata" id="selectorlabel">Select a year:</label> 		
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="form-group" id="control-row">		
+						<select id="yeardata" class="form-control"></select>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group" id="control-row-2" style="display:none">	
+						<select id="btweyear" style="width:100%" class="form-control"> </select>
+					</div>
+				</div>		
+			</div>
+					
+			<div class="form-group" >			
+				<div class="checkbox checkbox-slider--b-flat" id="togglebtn" style="margin-top:0px">
+					<label>
+						<input type="checkbox"><span>Compare between years</span>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group" style="margin-bottom:0px" >
+				<label for="" >Display:</label> 		
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="form-group" id="control-row-3">		
+						<select id="vehicleSelector" class="form-control" autocomplete="off">
+							<option value="a" selected="selected">All vehicle types</option>
+							<option value="c">Cars</option>
+							<option value="h">HGVs</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group" id="control-row-4" >	
+						<select id="networkSelector" style="width:100%" class="form-control" autocomplete="off">
+							<option value="a" selected="selected">All network</option>
+							<option value="m">Main carriageway</option>
+							<option value="s">Slip road</option>
+						</select>
+					</div>
+				</div>		
+			</div>
+			
+		</div>
+	</div> 
+
+	<div class="panel panel-default" id="selectorPanel">
+		<div class="panel-heading">
+			<h4 style="margin-bottom:0; margin-top:5px">Key</h4>
+		</div>
+		
+		<div class="panel-body" style="padding-top:0px">
+			
+			<div class="row">		
+			  <div class="col-xs-3" style="width:15px"><div class="allVCircle" id="legend1"></div></div>
+			  <div class="col-xs-3" style="width:-webkit-fit-content;padding-left:5px"><p class="small" style="margin-bottom:5px" id="legend2">All vehicles</p></div>
+			  <div class="col-xs-3" style="width:15px"><div class="carCircle" id="legend3"></div></div>
+			  <div class="col-xs-3" style="width:-webkit-fit-content;padding-left:5px"><p class="small" style="margin-bottom:5px" id="legend4">Cars</p></div>
+			  <div class="col-xs-3" style="width:15px"><div class="hgvCircle" id="legend5"></div></div>
+			  <div class="col-xs-3" style="width:-webkit-fit-content;padding-left:5px"><p class="small" style="margin-bottom:5px" id="legend6">HGVs</p></div>
+			</div>
+					
+		<div class="form-group" style="padding-top:3px;margin-bottom:0px" id="detailsBox">
+			<div class="form-group" style="margin-bottom:0px">
+				<p class="small" >
+				   Produced by David Morera<br/>
+				   Base Map: <a target="_blank" href="https://www.mapbox.com/">Mapbox</a> <br/>
+				   Traffic Count Data: <a target="_blank" href="http://webtris.highwaysengland.co.uk/">Highways England</a>
+				</p> 
+			</div>
+			
+			<div class="form-group" style="margin-bottom:0px;margin-top:-5px" >
+				<div class="" style="margin-left:-3px;height:35px">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://aws-website-hetrafficcounts-181w4.s3-website-us-east-1.amazonaws.com/"><i class="fa fa-facebook-square fa-3x social"></i></a>
+	            <a target="_blank" href="https://twitter.com/home?status=Highways%20England%20Traffic%20Counts%20Map%20https://d2insthdtlh4wc.cloudfront.net/%20via%20@d_morera"><i class="fa fa-twitter-square fa-3x social"></i></a>
+	            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https://d2insthdtlh4wc.cloudfront.net/&title=Highways%20England%20Traffic%20Counts%20Map&summary="><i class="fa fa-linkedin-square fa-3x social"></i></a>
+				<a target="_blank" href="https://plus.google.com/share?url=https://d2insthdtlh4wc.cloudfront.net/"><i class="fa fa-google-plus-square fa-3x social"></i></a>
+	            <a target="_blank" href="mailto:?&subject=Highways England Traffic Counts&body=Check%20this%20website%20out%3A%20https%3A//www.facebook.com/sharer/sharer.php?u=https://d2insthdtlh4wc.cloudfront.net/"><i class="fa fa-envelope-square fa-3x social"></i></a>
+				</div> 	
+			</div>
+		</div>
+			
+		</div>
+	</div> 
+	
+	<div class="panel panel-default" id="chartPanel" style="display:none" >
+		<div class="panel-heading">
+		    <div class="panel-title pull-left">
+				<h4 style="margin-bottom:0; margin-top:5px">Annual Average Daily Flow (AADF)</h4>
+			</div>
+			<div class="panel-title pull-right">
+				<button type="button" class="close" aria-label="Close" data-effect="hide">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="clearfix"></div>			
+		</div>
+		
+		<div class="panel-body" id="chartarea">
+			
+			<div id="bubbleplots"> 
+				<div class="bubbleplot" id="plt01" style="display: none;margin-left:0px;margin-right:0px">
+					<div class="plot" id="plotdiv_01"></div>
+				</div>		
+				<div class="bubbleplot" id="plt02" style="display: none">
+					<div class="plot" id="plotdiv_02""></div>
+				</div>
+				<div class="bubbleplot" id="plt03" >
+					<div class="plot" id="plotdiv_03""></div>
+				</div>
+			</div>
+			
+			<div class="btn-group-sm" style="text-align: center">
+			  <button type="button" class="btn btn-default" onclick="javascript:showonlyone('plt03');">Flow</button>
+			  <button type="button" class="btn btn-default" onclick="javascript:showonlyone('plt01');">Flow by type</button>
+			  <button type="button" class="btn btn-default" onclick="javascript:showonlyone('plt02');">% Flow by type</button>
+			</div>
+			
+			<div style="background-color:white;height:10"></div>
+
+		</div>
+	</div>
+	
+</div> 
+
+</div>
+
+
+<script src="js/index.js"></script>
+
+<script>
+$(function(){
+$('.close').on('click',function(){
+    var effect = $(this).data('effect');
+        $(this).closest('.panel')[effect]();
+	})
+})
+</script>
+
+<script>
+$(':checkbox:checked').prop('checked',false);
+</script>
+
+</body>
+</html>
