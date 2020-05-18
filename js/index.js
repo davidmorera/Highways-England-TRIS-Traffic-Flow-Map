@@ -18,7 +18,7 @@
 	var gd = gd3.node();
 
 	var yearto = ( (new Date()).getFullYear() ) ;
-	var yearfrom = 2010;
+	var yearfrom = 2011;
 	
 	
 	var webtrisid = 8741;
