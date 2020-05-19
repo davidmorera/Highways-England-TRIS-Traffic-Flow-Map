@@ -17,8 +17,8 @@
 
 	var gd = gd3.node();
 
-	var yearto = ( (new Date()).getFullYear() ) ;
-	var yearfrom = 2011;
+	var yearto = ( (new Date()).getFullYear() ) -1 ;
+	var yearfrom = ( (new Date()).getFullYear() ) - 9;
 	
 	
 	var webtrisid = 8741;
@@ -179,7 +179,15 @@
 			return rows.map(function(row) { return row[key]; });
 		}
 
-		var listofYears  = ['2019','2018','2017','2016','2015','2014','2013','2012','2011','2010']
+		var listofYears = [];
+
+		for (var i = yearfrom; i <= yearto; i++) {
+			listofYears.push(i);
+		}
+
+		var listofYears = listofYears.reverse()
+
+//		var listofYears  = ['2019','2018','2017','2016','2015','2014','2013','2012','2011','2010']
 			  
 		var wbtID = unpack(rows, 'webtrisID'),
 			ctID = unpack(rows, 'counterID'),
@@ -333,7 +341,7 @@
 				}
 
 				Plotly.setPlotConfig({
-				  mapboxAccessToken: 'pk.eyJ1IjoiZXRwaW5hcmQiLCJhIjoiY2luMHIzdHE0MGFxNXVubTRxczZ2YmUxaCJ9.hwWZful0U2CQxit4ItNsiQ'
+				  mapboxAccessToken: 'pk.eyJ1IjoibXVyZTg2IiwiYSI6ImNqOG9qNXJxYzAzMXoyd3BlNDNvZmQ2azIifQ.CeIqza0-74XynHocvJDDNg'
 				})
 
 				Plotly.newPlot(gd, data, layout, {showLink: false,displayModeBar : false});		
@@ -472,9 +480,9 @@
 					Plotly.redraw(gd);
 					
 					document.getElementById('legend1').className = 'incCircle';
-					document.getElementById('legend2').innerHTML = 'Flow increase';
+					document.getElementById('legend2').innerHTML = 'Flow decrease';
 					document.getElementById('legend3').className = 'decCircle';
-					document.getElementById('legend4').innerHTML = 'Flow decrease';					
+					document.getElementById('legend4').innerHTML = 'Flow increase';					
 					document.getElementById('legend5').className = 'blkCircle';
 					document.getElementById('legend6').innerHTML = ' ';	
 					
