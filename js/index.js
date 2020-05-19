@@ -341,7 +341,7 @@
 				}
 
 				Plotly.setPlotConfig({
-				  mapboxAccessToken: 'pk.eyJ1IjoibXVyZTg2IiwiYSI6ImNrYWRrc3NzbzFyZncyenA0MjZ6OGpsZTMifQ.-iDKN_Pm6P6igpGhfL-2FA'
+				  mapboxAccessToken: 'pk.eyJ1IjoibXVyZTg2IiwiYSI6ImNqOG9qNXJxYzAzMXoyd3BlNDNvZmQ2azIifQ.CeIqza0-74XynHocvJDDNg'
 				})
 
 				Plotly.newPlot(gd, data, layout, {showLink: false,displayModeBar : false});		
